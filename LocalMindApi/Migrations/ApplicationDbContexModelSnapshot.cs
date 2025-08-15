@@ -22,6 +22,35 @@ namespace LocalMindApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("LocalMindApi.Models.UserAdditionalDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserAdditionalDetails");
+                });
+
             modelBuilder.Entity("LocalMindApi.Models.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -61,6 +90,22 @@ namespace LocalMindApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LocalMindApi.Models.UserAdditionalDetails", b =>
+                {
+                    b.HasOne("LocalMindApi.Models.Users.User", "User")
+                        .WithOne("UserAdditionalDetails")
+                        .HasForeignKey("LocalMindApi.Models.UserAdditionalDetails", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LocalMindApi.Models.Users.User", b =>
+                {
+                    b.Navigation("UserAdditionalDetails");
                 });
 #pragma warning restore 612, 618
         }
