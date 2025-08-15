@@ -1,0 +1,11 @@
+using System.Linq;
+using System.Threading.Tasks;
+using LocalMindApi.Models.Users;
+
+namespace LocalMindApi.Repositories;
+
+public interface IUserRepository
+{
+    ValueTask<User> InsertUserAsync(User user);
+    IQueryable<User> SelectAllUsers(); 
+}
