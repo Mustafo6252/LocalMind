@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LocalMindApi.Data;
 using LocalMindApi.Models.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace LocalMindApi.Repositories;
 
@@ -21,6 +22,7 @@ public class UserRepository: IUserRepository
         return user;
     }
 
-    public IQueryable<User> SelectAllUsers()=>
-         this.contex.Users;
+    public IQueryable<User> SelectAllUsers() =>
+        this.contex.Users
+            .Include(u => u.UserAdditionalDetails);
 }

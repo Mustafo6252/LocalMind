@@ -22,7 +22,17 @@ namespace LocalMindApi.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UserAdditionalDetails>()
+                .HasOne(userAdditionalDetails => userAdditionalDetails.User)
+                .WithOne(user => user.UserAdditionalDetails)
+                .HasForeignKey<UserAdditionalDetails>(userAdditionalDetails => userAdditionalDetails.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+              
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>()
+                .Property(u => u.Id)
+                .ValueGeneratedNever(); 
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,3 +41,5 @@ namespace LocalMindApi.Data
         }
     }
 }
+
+
