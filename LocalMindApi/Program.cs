@@ -1,6 +1,9 @@
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 using LocalMindApi.Data;
 using LocalMindApi.Repositories;
+using LocalMindApi.Repositories.UserAdditionalDetails;
 using LocalMindApi.Services.Account;
 using LocalMindApi.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,14 +33,22 @@ builder.Services.AddAuthentication(option =>
             ValidIssuer = builder.Configuration["AuthConfiguration:Issuer"],
             ValidAudience = builder.Configuration["AuthConfiguration:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["AuthConfiguration:Key"]!))
+                Encoding.UTF8.GetBytes(builder.Configuration["AuthConfiguration:Key"]!)),
+            RoleClaimType = ClaimTypes.Role 
         };
-    }); 
+    });
+builder.Services.AddAuthorization();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
 
 builder.Services.AddDbContext<ApplicationDbContex>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IUserAdditionalRepository, UserAdditionalRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddControllers();

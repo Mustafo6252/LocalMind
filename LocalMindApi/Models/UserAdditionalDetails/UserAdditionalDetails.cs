@@ -12,5 +12,5 @@ public class UserAdditionalDetails
     public string Country { get; set; }
     
     public Guid UserId { get; set; }
-    public User User { get; set; }
+    public User?   User { get; set; }
 }
